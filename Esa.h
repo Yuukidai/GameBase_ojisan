@@ -1,19 +1,16 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include <vector>
 
-class Ground :
+class Esa :
     public GameObject
 {
-	
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
-	Ground(GameObject* parent);
+	Esa(GameObject* parent);
 
 	//初期化
-	void Initialize() override;
-	std::vector<std::vector<int>> GetMapData() { return mapData_; }
+	void Initialize() override;	
 
 	//更新
 	void Update() override;
@@ -23,12 +20,6 @@ public:
 
 	//開放
 	void Release() override;
-private:
-	int hModel_;
-	int hModel_t;
 
-	std::vector<std::vector<int>> mapData_;
-	int mapWidth_;
-	int mapHeight_;
 };
 

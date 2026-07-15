@@ -1,24 +1,25 @@
 #include "Ground.h"
 #include "Engine/Model.h"
-
+#include "Engine/CsvReader.h"
 
 namespace
 {
+	//int mapData_[10][10] = {};
 	using std::vector;
 	int model_t = -1;
-	vector< vector<int>> mapData =
-	{
-	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 0行目 (外壁)
-	{1, 0, 0, 0, 1, 0, 0, 0, 0, 1}, // 1行目 (左上がスタート)
-	{1, 0, 1, 0, 1, 0, 1, 1, 0, 1}, // 2行目
-	{1, 0, 1, 0, 0, 0, 1, 0, 0, 1}, // 3行目
-	{1, 1, 1, 1, 1, 0, 1, 0, 1, 1}, // 4行目
-	{1, 0, 0, 0, 1, 0, 0, 0, 1, 1}, // 5行目
-	{1, 0, 1, 0, 1, 1, 1, 0, 0, 1}, // 6行目
-	{1, 0, 1, 0, 0, 0, 1, 1, 0, 1}, // 7行目
-	{1, 1, 1, 1, 1, 0, 0, 0, 0, 1}, // 8行目 (右下がゴール)
-	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}  // 9行目 (外壁)
-	};
+	//vector< vector<int>> mapData =
+	//{
+	//{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 0行目 (外壁)
+	//{1, 0, 0, 0, 1, 0, 0, 0, 0, 1}, // 1行目 (左上がスタート)
+	//{1, 0, 1, 0, 1, 0, 1, 1, 0, 1}, // 2行目
+	//{1, 0, 1, 0, 0, 0, 1, 0, 0, 1}, // 3行目
+	//{1, 1, 1, 1, 1, 0, 1, 0, 1, 1}, // 4行目
+	//{1, 0, 0, 0, 1, 0, 0, 0, 1, 1}, // 5行目
+	//{1, 0, 1, 0, 1, 1, 1, 0, 0, 1}, // 6行目
+	//{1, 0, 1, 0, 0, 0, 1, 1, 0, 1}, // 7行目
+	//{1, 1, 1, 1, 1, 0, 0, 0, 0, 1}, // 8行目 (右下がゴール)
+	//{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}  // 9行目 (外壁)
+	//};
 }
 
 
@@ -26,7 +27,21 @@ namespace
 Ground::Ground(GameObject* parent)
 	:GameObject(parent,"Ground"), hModel_(-1)
 {
-	mapData_ = mapData;//ファイルグローバルのmapdataをコピーしてメンバ関数mapdata
+	CsvReader csvData;
+	csvData.Load("map.csv");
+	mapWidth_ = csvData.GetWidth();
+	mapHeight_ = csvData.GetHeight();
+
+	mapData_ = vector<vector<int>>(mapHeight_, vector<int>(mapWidth_, 0));
+
+	for (int x = 0; x < mapWidth_; x++)
+	{
+		for (int y = 0; y < mapHeight_; y++)
+		{
+			mapData_[y][x] = csvData.GetValue(x,y);
+		}
+	}
+	//mapData_ = mapData;//ファイルグローバルのmapdataをコピーしてメンバ関数mapdata
 }
 
 void Ground::Initialize()
