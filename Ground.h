@@ -26,8 +26,11 @@ public:
 private:
 	int hModel_;
 	int hModel_t;
+	int hModel_s;
+	int hModel_p;
 
 	std::vector<std::vector<int>> mapData_;
+	std::vector<std::vector<int>> objMap_;
 	int mapWidth_;
 	int mapHeight_;
 };

@@ -17,7 +17,7 @@ void TestScene::Initialize()
 	Ground* pGround = Instantiate <Ground>(this);
 	pPlayer->SetGround(pGround);
 
-	Camera::SetPosition({ 0,10,-20 });
+	Camera::SetPosition({ 0,20,-20 });
 	Camera::SetTarget({ 0,0,0 });
 }
 

@@ -1,16 +1,22 @@
 #pragma once
 #include "Engine/GameObject.h"
 
-class Esa :
+enum FoodType
+{
+	FOODTYPE_NORMAL,
+	FOODTYPE_PAWER,
+	FOODTYPE_MAX,
+};
+
+class Food :
     public GameObject
 {
 public:
-	//コンストラクタ
-	//引数：parent  親オブジェクト（SceneManager）
-	Esa(GameObject* parent);
+	Food();
+	~Food();
 
 	//初期化
-	void Initialize() override;	
+	void Initialize() override;
 
 	//更新
 	void Update() override;
