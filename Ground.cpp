@@ -1,7 +1,7 @@
 #include "Ground.h"
 #include "Engine/Model.h"
 #include "Engine/CsvReader.h"
-
+#include "Food.h"
 
 namespace
 {
@@ -34,7 +34,7 @@ namespace
 }
 
 Ground::Ground(GameObject* parent)
-    :GameObject(parent, "Ground"), hModel_(-1), mapWidth_(-1), mapHeight_(-1)
+    :GameObject(parent, "Ground"), hModel_(-1), mapWidth_(-1), mapHeight_(-1), foodCount_(0)
 {
     CsvReader csvData;
     csvData.Load("map.csv"); //CSVファイルを読み込む
@@ -55,6 +55,20 @@ Ground::Ground(GameObject* parent)
         for (int y = 0; y < mapHeight_; y++)
         {
             objMap_[y][x] = csvData.GetValue(x, y + mapHeight_); //CSVの値をobjMap_に格納
+            Food* food = Instantiate<Food>(this);
+            food->SetPosition({ -9.0f + x * 2.0f, 0.0f , 9.0f - y * 2.0f });
+            if (objMap_[y][x] == 1)
+            {
+                food->SetFoodType(FoodType::FOODTYPE_NORMAL);
+               
+                //PushBackChild(food);
+            }
+            else if (objMap_[y][x] == 2)
+            {
+                food->SetFoodType(FoodType::FOODTYPE_POWER);
+                
+              // PushBackChild(food);
+            }
         }
     }
 
@@ -65,8 +79,8 @@ void Ground::Initialize()
 {
     hModel_ = Model::Load("jimen3.fbx");
     hModel_t = Model::Load("block.fbx");
-    hModel_s = Model::Load("esa.fbx");
-    hModel_p = Model::Load("Pesa.fbx");
+   // hModel_s = Model::Load("esa.fbx");
+   // hModel_p = Model::Load("Pesa.fbx");
 
 }
 
@@ -86,7 +100,7 @@ void Ground::Draw()
                 Model::SetTransform(hModel_t, tr);
                 Model::Draw(hModel_t);
             }
-            if (objMap_[j][i] == 1) {
+           /* if (objMap_[j][i] == 1) {
                 Transform tr2;
                 tr2.position_ = { -9.0f + i * 2.0f, 0.0f, 9.0f - j * 2.0f };
                 tr2.scale_ = { 0.3f, 0.3f, 0.3f };
@@ -101,11 +115,26 @@ void Ground::Draw()
                 tr2.rotate_.y += 1.0f;
                 Model::SetTransform( hModel_p , tr2);
                 Model::Draw( hModel_p );
-            }
+            }*/
         }
     }
 }
 
 void Ground::Release()
 {
+}
+
+void Ground::AddFoodCount()
+{
+}
+
+
+void Ground::SubFoodCount()
+{
+    foodCount_--;
+
+    if (foodCount_ <= 0)
+    {
+        // ここで餌を復活させる
+    }
 }

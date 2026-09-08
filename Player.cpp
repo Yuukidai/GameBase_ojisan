@@ -4,6 +4,7 @@
 #include "TestScene.h"
 #include "Engine/Input.h"
 #include "Ground.h"
+#include "Engine/SphereCollider.h"
 
 
 
@@ -54,7 +55,7 @@ namespace
 
 
 Player::Player(GameObject* parent)
-	:GameObject(parent), hWalkModel_(-1), hIdleModel_(-1) {
+	:GameObject(parent,"Player"), hWalkModel_(-1), hIdleModel_(-1) {
 	//swordDirには、初期方向として、ローカルモデルの剣の根っこから
 	//先端までのベクトルとして（0,1,0)を代入しておく
 	//初期位置は原点
@@ -67,7 +68,8 @@ void Player::Initialize()
 
 	hIdleModel_ = Model::Load("Idle.fbx");
 	Model::SetAnimFrame(hIdleModel_, 0, 117, 1.0);
-
+	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 1, 0), 1.0f);
+	AddCollider(collision);
 
 }
 
@@ -84,7 +86,7 @@ void Player::Update()
 
 	XMVECTOR pos = XMLoadFloat3(&transform_.position_);
 	XMVECTOR move = XMVectorSet(0, 0, 0, 0);
-	const float SPEED = 0.05f;
+	const float SPEED = 0.08f;
 	float angle = 0.0f;
 	static float turnFrame = 0.0f; //回転中のフレーム数を管理する変数
 
@@ -198,5 +200,9 @@ void Player::Draw()
 
 
 void Player::Release()
+{
+}
+
+void Player::OnCollision(GameObject* pTarget)
 {
 }

@@ -23,6 +23,9 @@ public:
 
 	//開放
 	void Release() override;
+
+	void AddFoodCount();//
+	void SubFoodCount();//
 private:
 	int hModel_;
 	int hModel_t;
@@ -33,5 +36,7 @@ private:
 	std::vector<std::vector<int>> objMap_;
 	int mapWidth_;
 	int mapHeight_;
+	int foodCount_;//
+
 };
 
