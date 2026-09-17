@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include <vector>
+#include "Food.h"
 
 class Ground :
     public GameObject
@@ -26,6 +27,9 @@ public:
 
 	void AddFoodCount();//
 	void SubFoodCount();//
+
+	void RespawnFoods();
+
 private:
 	int hModel_;
 	int hModel_t;
@@ -38,5 +42,11 @@ private:
 	int mapHeight_;
 	int foodCount_;//
 
+
+	// 餌の出現位置を保存
+	std::vector<XMFLOAT3> foodPositions_;
+
+	// 餌の種類も保存
+	std::vector<FoodType> foodTypes_;
 };
 

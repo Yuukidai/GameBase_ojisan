@@ -55,24 +55,40 @@ Ground::Ground(GameObject* parent)
         for (int y = 0; y < mapHeight_; y++)
         {
             objMap_[y][x] = csvData.GetValue(x, y + mapHeight_); //CSVの値をobjMap_に格納
-            Food* food = Instantiate<Food>(this);
-            food->SetPosition({ -9.0f + x * 2.0f, 0.0f , 9.0f - y * 2.0f });
-            if (objMap_[y][x] == 1)
+            if (objMap_[y][x] == 1 || objMap_[y][x] == 2)
             {
-                food->SetFoodType(FoodType::FOODTYPE_NORMAL);
-               
-                //PushBackChild(food);
-            }
-            else if (objMap_[y][x] == 2)
-            {
-                food->SetFoodType(FoodType::FOODTYPE_POWER);
-                
-              // PushBackChild(food);
+                Food* food = Instantiate<Food>(this);
+
+                XMFLOAT3 pos = {
+                    -9.0f + x * 2.0f,
+                    0.0f,
+                    9.0f - y * 2.0f
+                };
+
+                food->SetPosition(pos);
+
+                FoodType type;
+
+                if (objMap_[y][x] == 1)
+                {
+                    type = FoodType::FOODTYPE_NORMAL;
+                }
+                else
+                {
+                    type = FoodType::FOODTYPE_POWER;
+                }
+
+                food->SetFoodType(type);
+
+                // 復活用に保存
+                foodPositions_.push_back(pos);
+                foodTypes_.push_back(type);
+
+                // 餌の数を増やす
+                AddFoodCount();
             }
         }
     }
-
-
 }
 
 void Ground::Initialize()
@@ -126,15 +142,33 @@ void Ground::Release()
 
 void Ground::AddFoodCount()
 {
+    foodCount_++;
 }
 
 
 void Ground::SubFoodCount()
 {
-    foodCount_--;
+    if (foodCount_ > 0)
+    {
+        foodCount_--;
+    }
 
     if (foodCount_ <= 0)
     {
-        // ここで餌を復活させる
+        RespawnFoods();
     }
+}
+
+void Ground::RespawnFoods()
+{
+    for (int i = 0; i < foodPositions_.size(); i++)
+    {
+        Food* food = Instantiate<Food>(this);
+
+        food->SetPosition(foodPositions_[i]);
+        food->SetFoodType(foodTypes_[i]);
+    }
+
+    // 餌の数を元に戻す
+    foodCount_ = static_cast<int>(foodPositions_.size());
 }
